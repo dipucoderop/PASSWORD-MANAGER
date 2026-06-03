@@ -1,7 +1,8 @@
 from cryptography.fernet import Fernet
 s=str(input("IF YOU ARE NEW CREATE maximum 15 character MASTERPASSWORD BY PRESSING D AND IF ALREADY CREATED EARLIER THEN PRESS F"))
 if s=="D":
-   with open("masterpassw.txt","a+") as pp:
+   
+  with open("masterpassw.txt","a+") as pp:
      l=input("ENTER YOUR MASTER PASSWORD")
      if len(l)==15:
         print("SO YOUR MASTER PASSWORD IS:",l)
@@ -13,18 +14,33 @@ if s=="D":
 
 A=str(input("Enter your Master password"))
 with open("masterpassw.txt","r") as ff:
-    j=ff.read(16)
+    s=ff.readlines()
+    j=s[0]
 ff.close()
 if A==j:
-   key=Fernet.generate_key()
-   fo=Fernet(key)
+   import os
+
+   def write_key():
+       key = Fernet.generate_key()
+       with open("key.key", "wb") as key_file:
+           key_file.write(key)
+
+   def load_key():
+       with open("key.key", "rb") as file:
+           return file.read()
+
+   if not os.path.exists("key.key"):
+       write_key()
+
+   key = load_key()
+   h = Fernet(key)
 
    def view():
     with open("password.txt", "r") as fp:
-        h=fp.readlines()
-        for line in h:
+        L=fp.readlines()
+        for line in L:
             website, username, encrypted = line.strip().split("|")
-            password = fo.decrypt(encrypted.encode()).decode()
+            password = h.decrypt(encrypted.encode()).decode()
             print(website,username,password)
 
    def add():
@@ -33,7 +49,7 @@ if A==j:
         username=input("ENTER YOUR USERNAME:")
         password=input("ENTER PASSWORD:")
         website=input("ENTER IN WHICH WEBSITE YOU HAVE THAT ACCOUNT:")
-        pf.write(website+"|"+username+"|"+fo.encrypt(password.encode()).decode()+"\n")
+        pf.write(website+"|"+username+"|"+ (h.encrypt(password.encode())).decode()+"\n")
     pf.close()
    while True:
     mode=input("PRESS 1 TO VIEW PASSWORD,PRESS 2 TO ADD PASSWORD,PRESS Q TO QUITE")
