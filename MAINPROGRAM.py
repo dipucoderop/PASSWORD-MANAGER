@@ -52,7 +52,7 @@ if A==j:
         pf.write(website+"|"+username+"|"+ (h.encrypt(password.encode())).decode()+"\n")
     pf.close()
    while True:
-    mode=input("PRESS 1 TO VIEW PASSWORD,PRESS 2 TO ADD PASSWORD,PRESS Q TO QUITE")
+    mode=input("PRESS 1 TO VIEW PASSWORD,PRESS 2 TO ADD PASSWORD,PRESS q TO QUITE")
     if mode=="1":
           view()
           continue
@@ -60,6 +60,9 @@ if A==j:
           add()
           continue
     if mode=="q":
+         print( )
+         print("THANK YOU")
          break  
+    
 else:
    print("PLEASE ENTER VALID MASTERPASSWORD!!")
